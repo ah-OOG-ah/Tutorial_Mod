@@ -14,7 +14,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import com.tutorialmod.Neutral_Hunter.proxy.CommonProxy;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = Reference.MOD_ID, version = Reference.VERSION, name = Reference.NAME)
+import static com.tutorialmod.Neutral_Hunter.Tags.VERSION;
+
+@Mod(modid = Reference.MOD_ID, version = VERSION, name = Reference.NAME)
 public class TutorialMod
 {
     @Instance

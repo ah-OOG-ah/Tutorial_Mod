@@ -11,7 +11,7 @@ plugins {
 }
 
 // Project properties
-group = "rfg.examplemod"
+group = "com.tutorialmod.Neutral_Hunter"
 version = "1.0.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
@@ -54,16 +54,6 @@ tasks.injectTags.configure {
   outputClassName.set("${project.group}.Tags")
 }
 
-// Put the version from gradle into mcmod.info
-tasks.processResources.configure {
-  val projVersion = project.version.toString() // Needed for configuration cache to work
-  inputs.property("version", projVersion)
-
-  filesMatching("mcmod.info") {
-    expand(mapOf("modVersion" to projVersion))
-  }
-}
-
 // Create a new dependency type for runtime-only dependencies that don't get included in the maven publication
 val runtimeOnlyNonPublishable: Configuration by configurations.creating {
   description = "Runtime only dependencies that are not published alongside the jar"
@@ -94,8 +84,6 @@ repositories {
 }
 
 dependencies {
-  // Adds NotEnoughItems and its dependencies (CCL&CCC) to runClient/runServer
-  runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.3.39-GTNH:dev")
   // Example: grab the ic2 jar from curse maven and deobfuscate
   // api(rfg.deobf("curse.maven:ic2-242638:2353971"))
   // Example: grab the ic2 jar from libs/ in the workspace and deobfuscate
@@ -152,40 +140,13 @@ idea {
           self.add(Gradle("4. Run Obfuscated Server").apply {
             setProperty("taskNames", listOf("runObfServer"))
           })
-          /*
-          These require extra configuration in IntelliJ, so are not enabled by default
-          self.add(Application("Run Client (IJ Native, Deprecated)", project).apply {
-            mainClass = "GradleStart"
-            moduleName = project.name + ".ideVirtualMain"
-            afterEvaluate {
-              val runClient = tasks.runClient.get()
-              workingDirectory = runClient.workingDir.absolutePath
-              programParameters = runClient.calculateArgs(project).map { '"' + it + '"' }.joinToString(" ")
-              jvmArgs = runClient.calculateJvmArgs(project).map { '"' + it + '"' }.joinToString(" ") +
-                ' ' + runClient.systemProperties.map { "\"-D" + it.key + '=' + it.value.toString() + '"' }
-                .joinToString(" ")
-            }
-          })
-          self.add(Application("Run Server (IJ Native, Deprecated)", project).apply {
-            mainClass = "GradleStartServer"
-            moduleName = project.name + ".ideVirtualMain"
-            afterEvaluate {
-              val runServer = tasks.runServer.get()
-              workingDirectory = runServer.workingDir.absolutePath
-              programParameters = runServer.calculateArgs(project).map { '"' + it + '"' }.joinToString(" ")
-              jvmArgs = runServer.calculateJvmArgs(project).map { '"' + it + '"' }.joinToString(" ") +
-                ' ' + runServer.systemProperties.map { "\"-D" + it.key + '=' + it.value.toString() + '"' }
-                .joinToString(" ")
-            }
-          })
-          */
         }
         "compiler" {
           val self = this.delegate as org.jetbrains.gradle.ext.IdeaCompilerConfiguration
           afterEvaluate {
             self.javac.moduleJavacAdditionalOptions = mapOf(
               (project.name + ".main") to
-                tasks.compileJava.get().options.compilerArgs.map { '"' + it + '"' }.joinToString(" ")
+                      tasks.compileJava.get().options.compilerArgs.map { '"' + it + '"' }.joinToString(" ")
             )
           }
         }

@@ -16,7 +16,7 @@ public class TutorialTab extends CreativeTabs
     }
 
     @Override
-    public ItemStack getTabIconItem()
+    public ItemStack createIcon()
     {
         return new ItemStack(ItemInit.OBSIDIAN_INGOT);
     }
