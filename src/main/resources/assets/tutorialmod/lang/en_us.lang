@@ -1,0 +1,8 @@
+//Items
+item.obsidian_ingot.name=Obsidian Ingot
+
+//Blocks
+tile.silver_block.name=Silver Block
+
+//Tabs
+itemGroup.tutorialmodtab=Tutorial Tab
